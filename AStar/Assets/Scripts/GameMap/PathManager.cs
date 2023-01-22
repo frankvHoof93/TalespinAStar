@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Talespin.AStar.GameMap.MapTiles;
 using Talespin.AStar.Pathing;
@@ -13,7 +12,18 @@ namespace Talespin.AStar.GameMap
 
         private void Start()
         {
+            MouseInputManager mgr = MouseInputManager.Instance;
+            mgr.OnStartTileChanged += (prev, next) => HandleTileChanged(true, prev, next);
+            mgr.OnEndTileChanged += (prev, next) => HandleTileChanged(false, prev, next);
             MouseInputManager.Instance.OnSelectionChanged += HandleSelectionChanged;
+        }
+
+        private void HandleTileChanged(bool isPathStart, Tile prev, Tile next)
+        {
+            if (prev != null)
+                prev.ClearPathVisualization();
+            if (next != null)
+                next.VisualizePathPiece(isPathStart, !isPathStart);
         }
 
         private void HandleSelectionChanged()

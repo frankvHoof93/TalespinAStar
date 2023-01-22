@@ -1,5 +1,4 @@
 using System;
-using Talespin.AStar.GameMap;
 using Talespin.AStar.GameMap.MapTiles;
 using Talespin.AStar.Utils;
 using UnityEngine;
@@ -8,9 +7,14 @@ namespace Talespin.AStar.PlayerInput
 {
     public class MouseInputManager : CachedBehaviour<MouseInputManager>
     {
+        public delegate void HandleTileChange(Tile previousTile, Tile newTile);
+
         private const float MAX_DISTANCE = 10_000f;
 
+        public event HandleTileChange OnStartTileChanged;
+        public event HandleTileChange OnEndTileChanged;
         public event Action OnSelectionChanged;
+
 
         public Tile StartTile { get; private set; } = null;
         public Tile EndTile { get; private set; } = null;
@@ -48,6 +52,7 @@ namespace Talespin.AStar.PlayerInput
                     Debug.LogWarning("Can\'t pick Start- & End-Tile to be the same Tile.");
                     return; // Ignore
                 }
+                OnStartTileChanged?.Invoke(StartTile, t);
                 StartTile = t;
                 OnSelectionChanged?.Invoke();
             }    
@@ -63,6 +68,7 @@ namespace Talespin.AStar.PlayerInput
                     Debug.LogWarning("Can\'t pick Start- & End-Tile to be the same Tile.");
                     return; // Ignore
                 }
+                OnEndTileChanged?.Invoke(EndTile, t);
                 EndTile = t;
                 OnSelectionChanged?.Invoke();
             }
