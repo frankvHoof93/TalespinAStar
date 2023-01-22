@@ -1,3 +1,4 @@
+using System;
 using Talespin.AStar.GameMap.MapGen;
 using Talespin.AStar.GameMap.MapTiles;
 using Talespin.AStar.Utils;
@@ -13,6 +14,11 @@ namespace Talespin.AStar.GameMap
     public class MapManager : CachedBehaviour<MapManager>
     {
         #region Properties
+        /// <summary>
+        /// Event Fired when (new) Map is Spawned
+        /// </summary>
+        public event Action<Tile[,]> OnSpawnMap;
+
         /// <summary>
         /// Map-Tiles
         /// </summary>
@@ -51,7 +57,18 @@ namespace Talespin.AStar.GameMap
                 width = (uint)MapSize.x;
             if (!height.HasValue)
                 height = (uint)MapSize.y;
+            if (width > 125)
+            {
+                Debug.LogWarning("Clipped Width to 125 to prevent extremely long duration for MapGen");
+                width = 125;
+            }
+            if (height > 125)
+            {
+                Debug.LogWarning("Clipped Height to 125 to prevent extremely long duration for MapGen");
+                height = 125;
+            }
             Map = mapGenerator.GenerateMap(transform, width.Value, height.Value);
+            OnSpawnMap?.Invoke(Map);
         }
         /// <summary>
         /// Destroys active Map

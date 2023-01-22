@@ -19,7 +19,10 @@ namespace Talespin.AStar.GameMap.MapTiles
         /// <param name="isEnd">Is End Tile for Path?</param>
         public void SetPathTile(bool isStartTile, bool isEndTile)
         {
-            Debug.Log($"Visualize PathPiece: {gameObject.name} - {isStartTile} - {isEndTile}", this.gameObject);
+            Debug.Log($"Visualize PathPiece: {gameObject.name} - {isStartTile} - {isEndTile}", gameObject);
+            Vector3 localPos = transform.localPosition;
+            localPos.y = .25f;
+            transform.localPosition = localPos;
             _renderer.material.SetColor("_Color", Color.red);
         }
         /// <summary>
@@ -27,7 +30,10 @@ namespace Talespin.AStar.GameMap.MapTiles
         /// </summary>
         public void ClearPathTile()
         {
-            Debug.Log($"Clear PathPiece: {gameObject.name}", this.gameObject);
+            Debug.Log($"Clear PathPiece: {gameObject.name}", gameObject);
+            Vector3 localPos = transform.localPosition;
+            localPos.y = 0f;
+            transform.localPosition = localPos;
             _renderer.material.SetColor("_Color", Color.white);
         }
     }
