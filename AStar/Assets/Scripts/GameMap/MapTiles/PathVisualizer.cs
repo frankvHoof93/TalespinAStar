@@ -45,7 +45,7 @@ namespace Talespin.AStar.GameMap.MapTiles
             Vector3 localPos = transform.localPosition;
             localPos.y = .25f;
             transform.localPosition = localPos;
-            _renderer.material.SetColor("_Color", isStartTile ? pathStartColor : isEndTile ? pathEndColor : pathPieceColor);
+            SetColor(isStartTile ? pathStartColor : isEndTile ? pathEndColor : pathPieceColor);
         }
         /// <summary>
         /// Clear Visualization for Tile
@@ -55,7 +55,7 @@ namespace Talespin.AStar.GameMap.MapTiles
             Vector3 localPos = transform.localPosition;
             localPos.y = 0f;
             transform.localPosition = localPos;
-            _renderer.material.SetColor("_Color", Color.white);
+            SetColor(Color.white);
         }
 
         /// <summary>
@@ -64,6 +64,14 @@ namespace Talespin.AStar.GameMap.MapTiles
         private void Awake()
         {
             _renderer = GetComponent<Renderer>();
+        }
+        /// <summary>
+        /// Sets Color to material
+        /// </summary>
+        /// <param name="c">Color to set</param>
+        private void SetColor(Color c)
+        {
+            _renderer.material.color = c;
         }
         #endregion
     }
