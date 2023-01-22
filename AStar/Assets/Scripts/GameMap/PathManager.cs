@@ -38,7 +38,7 @@ namespace Talespin.AStar.GameMap
             if (prev != null)
                 prev.ClearPathVisualization();
             if (next != null)
-                next.VisualizePathPiece(isPathStart, !isPathStart);
+                next.VisualizePathPiece(isPathStart ? 0 : -2, -1);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Talespin.AStar.GameMap
                 {
                     IAStarNode pathNode = currPath[i];
                     if (pathNode as Tile != null)
-                        (pathNode as Tile).VisualizePathPiece(i == 0, i == currPath.Count - 1);
+                        (pathNode as Tile).VisualizePathPiece(i, currPath.Count);
                 }
             }
         }

@@ -140,9 +140,9 @@ namespace Talespin.AStar.GameMap.MapTiles
         /// <summary>
         /// Visualize Tile as Part of Path
         /// </summary>
-        /// <param name="isStart">Is Start Tile for Path?</param>
-        /// <param name="isEnd">Is End Tile for Path?</param>
-        public void VisualizePathPiece(bool isStart, bool isEnd) => visualizer.SetPathTile(isStart, isEnd);
+        /// <param name="indexInPath">Index of Tile in Path</param>
+        /// <param name="pathLength">Total Length of Path</param>
+        public void VisualizePathPiece(int indexInPath, int pathLength) => visualizer.SetPathTile(indexInPath, pathLength);
         /// <summary>
         /// Clear Visualization for Tile
         /// </summary>

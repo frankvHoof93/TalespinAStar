@@ -28,6 +28,10 @@ namespace Talespin.AStar.GameMap.MapTiles
         [Tooltip("Color to set if Tile is End-Position for Path")]
         private Color pathEndColor = Color.green;
 
+        [Header("Animation")]
+        [SerializeField]
+        private float tweenDuration = 1f;
+
         /// <summary>
         /// Renderer for Tile
         /// </summary>
@@ -36,6 +40,10 @@ namespace Talespin.AStar.GameMap.MapTiles
         /// MaterialPropertyBlock used to update Renderer-Properties
         /// </summary>
         private MaterialPropertyBlock mpBlock;
+        /// <summary>
+        /// Currently running Tween
+        /// </summary>
+        private LTDescr currTween;
         /// <summary>
         /// Property-ID for Color-Property in Shader
         /// </summary>
@@ -46,20 +54,26 @@ namespace Talespin.AStar.GameMap.MapTiles
         /// <summary>
         /// Visualize Tile as Part of Path
         /// </summary>
-        /// <param name="isStart">Is Start Tile for Path?</param>
-        /// <param name="isEnd">Is End Tile for Path?</param>
-        public void SetPathTile(bool isStartTile, bool isEndTile)
+        /// <param name="indexInPath">Index of Tile in Path</param>
+        /// <param name="pathLength">Total Length of Path</param>
+        public void SetPathTile(int indexInPath, int pathLength)
         {
+            if (currTween != null)
+                LeanTween.cancel(currTween.id);
             Vector3 localPos = transform.localPosition;
-            localPos.y = .25f;
+            localPos.y = .1f;
             transform.localPosition = localPos;
-            SetColor(isStartTile ? pathStartColor : isEndTile ? pathEndColor : pathPieceColor);
+            SetColor(indexInPath == 0 ? pathStartColor : indexInPath == pathLength - 1 ? pathEndColor : pathPieceColor);
+            if (pathLength != -1)
+                currTween = transform.LeanMoveLocalY(.25f, tweenDuration).setLoopPingPong(-1);
         }
         /// <summary>
         /// Clear Visualization for Tile
         /// </summary>
         public void ClearPathTile()
         {
+            if (currTween != null)
+                LeanTween.cancel(currTween.id);
             Vector3 localPos = transform.localPosition;
             localPos.y = 0f;
             transform.localPosition = localPos;
