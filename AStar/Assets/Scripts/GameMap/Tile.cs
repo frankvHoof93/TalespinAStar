@@ -9,6 +9,9 @@ namespace Talespin.AStar.GameMap
     [RequireComponent(typeof(Renderer))]
     public class Tile : MonoBehaviour, IAStarNode
     {
+        [SerializeField]
+        private Vector2 tileSize = new Vector2(1f, .75f);
+
         /// <summary>
         /// Cost to travel through this Tile
         /// </summary>
@@ -57,8 +60,15 @@ namespace Talespin.AStar.GameMap
         /// <param name="y"></param>
         public void SetPosition(int x, int y)
         {
-
-            transform.position = new Vector3(x, 0, y);
+#if UNITY_EDITOR // Add GridPos to Name for Debug Purposes
+            string name = gameObject.name;
+            name = name.Remove(name.IndexOf("(Clone)"));
+            gameObject.name = $"[{x}, {y}] - {name}";
+#endif
+            Vector3 newPos = new Vector3(x * tileSize.x, 0, y * tileSize.y);
+            if (y % 2 != 0)
+                newPos.x += 0.5f * tileSize.x;
+            transform.position = newPos;
         }
 
         private void Awake()

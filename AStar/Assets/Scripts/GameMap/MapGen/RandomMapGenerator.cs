@@ -19,11 +19,6 @@ namespace Talespin.AStar.GameMap.MapGen
         {
             public Tile TilePrefab;
             public float SpawnChance;
-
-            internal void SetSpawnChance(float newChance)
-            {
-                SpawnChance = newChance;
-            }
         }
         #endregion
 
@@ -50,7 +45,7 @@ namespace Talespin.AStar.GameMap.MapGen
                 TileSetting currSetting = tileSettings[i];
                 float newSpawnChance = currSetting.SpawnChance * totalChance;
                 currTotal += newSpawnChance;
-                tileSettings[i] = new TileSetting {TilePrefab = currSetting.TilePrefab, SpawnChance = currTotal }; // Adjust to Total
+                tileSettings[i] = new TileSetting { TilePrefab = currSetting.TilePrefab, SpawnChance = currTotal }; // Adjust to Total
             }
             totalChance = currTotal; // Fit (new) total so last tile is inside instead of outside of range
         }
@@ -77,15 +72,10 @@ namespace Talespin.AStar.GameMap.MapGen
 
         private Tile GetRandomTilePrefab()
         {
-            Debug.Log("Total " + totalChance);
             float randomVal = UnityEngine.Random.Range(0, totalChance);
-            Debug.Log("RandomVal " + randomVal);
             for (int i = 0; i < tileSettings.Count; i++)
-            {
-                Debug.Log(tileSettings[i].SpawnChance);
                 if (tileSettings[i].SpawnChance >= randomVal)
                     return tileSettings[i].TilePrefab;
-            }
             return null;
         }
     }
