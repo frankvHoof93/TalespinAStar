@@ -1,15 +1,40 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using Talespin.AStar.Pathing;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Talespin.AStar.GameMap
 {
+    /// <summary>
+    /// Represent a GameTile in the Map
+    /// </summary>
     [RequireComponent(typeof(Renderer))]
     public class Tile : MonoBehaviour, IAStarNode
     {
+        #region Properties
+        /// <summary>
+        /// Neighbours of Tile
+        /// <para>
+        /// Initialized upon first request
+        /// </para>
+        /// </summary>
+        public IEnumerable<IAStarNode> Neighbours
+        {
+            get
+            {
+                if (neighbours == null || neighbours.Count == 0)
+                    InitNeighbours();
+                return neighbours;
+            }
+        }
+        private List<IAStarNode> neighbours = null;
+
+        /// <summary>
+        /// Size of Tile (offset for Placement)
+        /// </summary>
         [SerializeField]
+        [Tooltip("Size of Tile (offset for Placement)")]
         private Vector2 tileSize = new Vector2(1f, .75f);
 
         /// <summary>
@@ -19,11 +44,13 @@ namespace Talespin.AStar.GameMap
         [field: Tooltip("Cost to travel through this Tile")]
         public int TravelCost { get; private set; }
 
+        /// <summary>
+        /// Renderer for Tile (used for Visualization)
+        /// </summary>
         private Renderer _renderer;
+        #endregion
 
-        public IEnumerable<IAStarNode> Neighbours => neighbours;
-        private readonly List<IAStarNode> neighbours = new List<IAStarNode>();
-
+        #region Methods
         /// <summary>
         /// The cost of traveling from the Tile BEFORE entering this one, to a Neighour (i.e. the Tile AFTER this one)
         /// is equal to the TravelCost through THIS tile.
@@ -56,8 +83,8 @@ namespace Talespin.AStar.GameMap
         /// <summary>
         /// Set WorldSpace-Position based on Grid-Pos
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">Column</param>
+        /// <param name="y">Row</param>
         public void SetPosition(int x, int y)
         {
 #if UNITY_EDITOR // Add GridPos to Name for Debug Purposes
@@ -71,9 +98,23 @@ namespace Talespin.AStar.GameMap
             transform.position = newPos;
         }
 
+        /// <summary>
+        /// Self-Initialization for Tile
+        /// </summary>
         private void Awake()
         {
             _renderer = GetComponent<Renderer>();
         }
+
+        /// <summary>
+        /// Quick & dirty init through Physics-Engine
+        /// TODO: Should use Math instead
+        /// </summary>
+        private void InitNeighbours()
+        {
+            neighbours = Physics.OverlapSphere(transform.position, tileSize.x * 1.5f, 1 << gameObject.layer)
+                .Select(c => c.GetComponent<IAStarNode>()).ToList();
+        }
+        #endregion
     }
 }
