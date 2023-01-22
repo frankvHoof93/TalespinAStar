@@ -1,5 +1,6 @@
 using System;
 using Talespin.AStar.GameMap;
+using Talespin.AStar.GameMap.MapTiles;
 using Talespin.AStar.Utils;
 using UnityEngine;
 

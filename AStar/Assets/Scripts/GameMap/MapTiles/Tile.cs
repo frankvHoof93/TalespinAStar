@@ -4,12 +4,12 @@ using Talespin.AStar.Pathing;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Talespin.AStar.GameMap
+namespace Talespin.AStar.GameMap.MapTiles
 {
     /// <summary>
     /// Represent a GameTile in the Map
     /// </summary>
-    [RequireComponent(typeof(Renderer))]
+    [RequireComponent(typeof(PathVisualizer))]
     public class Tile : MonoBehaviour, IAStarNode
     {
         #region Properties
@@ -47,7 +47,7 @@ namespace Talespin.AStar.GameMap
         /// <summary>
         /// Renderer for Tile (used for Visualization)
         /// </summary>
-        private Renderer _renderer;
+        private PathVisualizer visualizer;
         #endregion
 
         #region Methods
@@ -98,25 +98,23 @@ namespace Talespin.AStar.GameMap
             transform.position = newPos;
         }
 
-
-        public void VisualizePathPiece(bool isStart, bool isEnd)
-        {
-            Debug.Log($"Visualize PathPiece: {gameObject.name} - {isStart} - {isEnd}", this.gameObject);
-            _renderer.material.SetColor("_Color", Color.red);
-        }
-
-        public void ClearPathVisualization()
-        {
-            Debug.Log($"Clear PathPiece: {gameObject.name}", this.gameObject);
-            _renderer.material.SetColor("_Color", Color.white);
-        }
+        /// <summary>
+        /// Visualize Tile as Part of Path
+        /// </summary>
+        /// <param name="isStart">Is Start Tile for Path?</param>
+        /// <param name="isEnd">Is End Tile for Path?</param>
+        public void VisualizePathPiece(bool isStart, bool isEnd) => visualizer.SetPathTile(isStart, isEnd);
+        /// <summary>
+        /// Clear Visualization for Tile
+        /// </summary>
+        public void ClearPathVisualization() => visualizer.ClearPathTile();
 
         /// <summary>
         /// Self-Initialization for Tile
         /// </summary>
         private void Awake()
         {
-            _renderer = GetComponent<Renderer>();
+            visualizer = GetComponent<PathVisualizer>();
         }
 
         /// <summary>

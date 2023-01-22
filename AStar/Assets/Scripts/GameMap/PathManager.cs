@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Talespin.AStar.GameMap.MapTiles;
 using Talespin.AStar.Pathing;
 using Talespin.AStar.PlayerInput;
 using UnityEngine;

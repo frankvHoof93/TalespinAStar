@@ -1,3 +1,4 @@
+using Talespin.AStar.GameMap.MapTiles;
 using UnityEngine;
 
 namespace Talespin.AStar.GameMap.MapGen

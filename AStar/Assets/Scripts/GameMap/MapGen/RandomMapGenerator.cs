@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Talespin.AStar.GameMap.MapTiles;
 using UnityEngine;
 
 namespace Talespin.AStar.GameMap.MapGen
