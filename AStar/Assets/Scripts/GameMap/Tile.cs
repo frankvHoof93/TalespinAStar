@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Talespin.AStar.Pathing;
 using UnityEngine;
@@ -47,6 +48,17 @@ namespace Talespin.AStar.GameMap
             // Return Distance between Positions
             Transform goalTF = goalBehaviour.transform;
             return Vector3.Distance(transform.position, goalTF.position);
+        }
+
+        /// <summary>
+        /// Set WorldSpace-Position based on Grid-Pos
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void SetPosition(int x, int y)
+        {
+
+            transform.position = new Vector3(x, 0, y);
         }
 
         private void Awake()
