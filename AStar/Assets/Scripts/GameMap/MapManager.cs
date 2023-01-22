@@ -20,9 +20,9 @@ namespace Talespin.AStar.GameMap
         /// <summary>
         /// Size for (default) Spawned Map (in Tiles)
         /// </summary>
-        [SerializeField]
-        [Tooltip("Size for (default) Spawned Map (in Tiles)")]
-        private Vector2Int mapSize;
+        [field: SerializeField]
+        [field: Tooltip("Size for (default) Spawned Map (in Tiles)")]
+        public Vector2Int MapSize { get; private set; }
         /// <summary>
         /// MapGenerator-Algorithm used to Generate Map
         /// </summary>
@@ -31,18 +31,26 @@ namespace Talespin.AStar.GameMap
 
         #region Methods
         /// <summary>
+        /// Spawns a new Map using <see cref="MapSize"/> for Size
+        /// </summary>
+        public void SpawnMap()
+        {
+            SpawnMap(null, null);
+        }
+
+        /// <summary>
         /// Spawns a new Map
         /// </summary>
-        /// <param name="width">Width for Map in Tiles. Set NULL to use <see cref="mapSize"/></param>
-        /// <param name="height">Height for Map in Tiles. Set NULL to use <see cref="mapSize"/></param>
-        public void SpawnMap(uint? width = null, uint? height = null)
+        /// <param name="width">Width for Map in Tiles. Set NULL to use <see cref="MapSize"/></param>
+        /// <param name="height">Height for Map in Tiles. Set NULL to use <see cref="MapSize"/></param>
+        public void SpawnMap(uint? width, uint? height)
         {
             if (Map != null)
                 DestroyMap();
             if (!width.HasValue)
-                width = (uint)mapSize.x;
+                width = (uint)MapSize.x;
             if (!height.HasValue)
-                height = (uint)mapSize.y;
+                height = (uint)MapSize.y;
             Map = mapGenerator.GenerateMap(transform, width.Value, height.Value);
         }
         /// <summary>
@@ -77,11 +85,11 @@ namespace Talespin.AStar.GameMap
             SpawnMap();
         }
         /// <summary>
-        /// Checks if <see cref="mapSize"/> is Valid
+        /// Checks if <see cref="MapSize"/> is Valid
         /// </summary>
         private void OnValidate()
         {
-            if (mapSize.x <= 0 || mapSize.y <= 0)
+            if (MapSize.x <= 0 || MapSize.y <= 0)
                 Debug.LogError("Invalid MapSize", this);
         }
         #endregion

@@ -42,7 +42,7 @@ namespace Talespin.AStar.GameMap.MapTiles
         /// </summary>
         [field: SerializeField]
         [field: Tooltip("Cost to travel through this Tile")]
-        public int TravelCost { get; private set; }
+        public uint TravelCost { get; private set; }
 
         /// <summary>
         /// Renderer for Tile (used for Visualization)

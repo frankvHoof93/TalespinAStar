@@ -2,7 +2,8 @@
     "name": "Talespin.AStar",
     "rootNamespace": "Talespin.AStar",
     "references": [
-        "GUID:9ab39b7445daffe449fd280101a269b3"
+        "GUID:9ab39b7445daffe449fd280101a269b3",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
