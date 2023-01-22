@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Pathing
+namespace Talespin.AStar.Pathing
 {
 	// interface for classes that can be used with the A* algorithm defined in AStar.cs
 	//

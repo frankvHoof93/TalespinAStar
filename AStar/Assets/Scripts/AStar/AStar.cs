@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Pathing
+namespace Talespin.AStar.Pathing
 {
 	// algorithm based on WikiPedia: http://en.wikipedia.org/wiki/A*_search_algorithm
 	//
