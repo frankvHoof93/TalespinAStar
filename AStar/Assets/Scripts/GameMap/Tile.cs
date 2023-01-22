@@ -98,6 +98,19 @@ namespace Talespin.AStar.GameMap
             transform.position = newPos;
         }
 
+
+        public void VisualizePathPiece(bool isStart, bool isEnd)
+        {
+            Debug.Log($"Visualize PathPiece: {gameObject.name} - {isStart} - {isEnd}", this.gameObject);
+            _renderer.material.SetColor("_Color", Color.red);
+        }
+
+        public void ClearPathVisualization()
+        {
+            Debug.Log($"Clear PathPiece: {gameObject.name}", this.gameObject);
+            _renderer.material.SetColor("_Color", Color.white);
+        }
+
         /// <summary>
         /// Self-Initialization for Tile
         /// </summary>
@@ -112,7 +125,7 @@ namespace Talespin.AStar.GameMap
         /// </summary>
         private void InitNeighbours()
         {
-            neighbours = Physics.OverlapSphere(transform.position, tileSize.x * 1.5f, 1 << gameObject.layer)
+            neighbours = Physics.OverlapSphere(transform.position, tileSize.x * .75f, 1 << gameObject.layer)
                 .Select(c => c.GetComponent<IAStarNode>()).ToList();
         }
         #endregion

@@ -1,4 +1,5 @@
 using Talespin.AStar.GameMap.MapGen;
+using Talespin.AStar.Utils;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -8,7 +9,7 @@ namespace Talespin.AStar.GameMap
     /// Maintains Tiles in Map
     /// </summary>
     [RequireComponent(typeof(IMapGenerator))]
-    public class MapManager : MonoBehaviour
+    public class MapManager : CachedBehaviour<MapManager>
     {
         #region Properties
         /// <summary>
@@ -58,10 +59,14 @@ namespace Talespin.AStar.GameMap
         /// <summary>
         /// Self-Initialization
         /// </summary>
-        private void Awake()
+        protected override void Awake()
         {
-            mapGenerator = GetComponent<IMapGenerator>();
-            Assert.IsNotNull(mapGenerator, "MapManager requires a MapGenerator-Algorithm");
+            base.Awake();
+            if (instance == this)
+            {
+                mapGenerator = GetComponent<IMapGenerator>();
+                Assert.IsNotNull(mapGenerator, "MapManager requires a MapGenerator-Algorithm");
+            }
         }
         /// <summary>
         /// Spawns Map on Start of Game
