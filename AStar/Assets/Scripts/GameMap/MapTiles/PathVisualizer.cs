@@ -32,6 +32,14 @@ namespace Talespin.AStar.GameMap.MapTiles
         /// Renderer for Tile
         /// </summary>
         private Renderer _renderer;
+        /// <summary>
+        /// MaterialPropertyBlock used to update Renderer-Properties
+        /// </summary>
+        private MaterialPropertyBlock mpBlock;
+        /// <summary>
+        /// Property-ID for Color-Property in Shader
+        /// </summary>
+        private static int? colorPropID;
         #endregion
 
         #region Methods
@@ -64,6 +72,7 @@ namespace Talespin.AStar.GameMap.MapTiles
         private void Awake()
         {
             _renderer = GetComponent<Renderer>();
+            mpBlock = new MaterialPropertyBlock();
         }
         /// <summary>
         /// Sets Color to material
@@ -71,7 +80,11 @@ namespace Talespin.AStar.GameMap.MapTiles
         /// <param name="c">Color to set</param>
         private void SetColor(Color c)
         {
-            _renderer.material.color = c;
+            if (!colorPropID.HasValue)
+                colorPropID = Shader.PropertyToID("_Color");
+            _renderer.GetPropertyBlock(mpBlock);
+            mpBlock.SetColor(colorPropID.Value, c);
+            _renderer.SetPropertyBlock(mpBlock);
         }
         #endregion
     }

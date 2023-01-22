@@ -106,8 +106,8 @@ namespace Talespin.AStar.GameMap.MapTiles
         /// Vector3.Distance(this, goal);
         /// </para>
         /// </summary>
-        /// <param name="goal"></param>
-        /// <returns></returns>
+        /// <param name="goal">Tile to estimate cost to</param>
+        /// <returns>Straight-Line Distance from this Tile to Goal</returns>
         public float EstimatedCostTo(IAStarNode goal)
         {
             // We need to assume that 'goal' is at least a MonoBehaviour, so that we can find a Transform
