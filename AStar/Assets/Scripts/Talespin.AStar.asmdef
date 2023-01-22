@@ -1,0 +1,16 @@
+{
+    "name": "Talespin.AStar",
+    "rootNamespace": "Talespin.AStar",
+    "references": [
+        "GUID:9ab39b7445daffe449fd280101a269b3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
