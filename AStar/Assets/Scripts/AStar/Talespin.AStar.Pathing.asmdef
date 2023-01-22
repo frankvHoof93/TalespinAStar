@@ -1,0 +1,14 @@
+{
+    "name": "TaleSpin.AStar.Pathing",
+    "rootNamespace": "TaleSpin.AStar.Pathing",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
