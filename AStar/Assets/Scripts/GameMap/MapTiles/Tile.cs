@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Talespin.AStar.Pathing;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -12,11 +12,38 @@ namespace Talespin.AStar.GameMap.MapTiles
     [RequireComponent(typeof(PathVisualizer))]
     public class Tile : MonoBehaviour, IAStarNode
     {
+        #region Constants
+        /// <summary>
+        /// Directions to Neighbours in Array if Starting-Tile is on an Odd Row
+        /// </summary>
+        private static readonly Vector2Int[] NEIGHBOUR_OFFSETS_ODD_ROW = new Vector2Int[]
+        {
+            new Vector2Int(0, 1),
+            new Vector2Int(1, 1),
+            new Vector2Int(-1, 0),
+            new Vector2Int(1, 0),
+            new Vector2Int(0, -1),
+            new Vector2Int(1, -1)
+        };
+        /// <summary>
+        /// Directions to Neighbours in Array if Starting-Tile is on an Even Row
+        /// </summary>
+        private static readonly Vector2Int[] NEIGHBOUR_OFFSETS_EVEN_ROW = new Vector2Int[]
+        {
+            new Vector2Int(-1, 1),
+            new Vector2Int(0, 1),
+            new Vector2Int(-1, 0),
+            new Vector2Int(1, 0),
+            new Vector2Int(-1, -1),
+            new Vector2Int(0, -1)
+        };
+        #endregion
+
         #region Properties
         /// <summary>
         /// Neighbours of Tile
         /// <para>
-        /// Initialized upon first request
+        /// Initialized upon first request (Lazy Init)
         /// </para>
         /// </summary>
         public IEnumerable<IAStarNode> Neighbours
@@ -29,6 +56,11 @@ namespace Talespin.AStar.GameMap.MapTiles
             }
         }
         private List<IAStarNode> neighbours = null;
+
+        /// <summary>
+        /// Coordinates in Grid for this Tile
+        /// </summary>
+        public Vector2Int GridCoordinates { get; private set; }
 
         /// <summary>
         /// Size of Tile (offset for Placement)
@@ -93,6 +125,7 @@ namespace Talespin.AStar.GameMap.MapTiles
             name = name.Remove(name.IndexOf("(Clone)"));
             gameObject.name = $"[{x}, {y}] - {name}";
 #endif
+            GridCoordinates = new Vector2Int(x, y);
             Vector3 newPos = new Vector3(x * tileSize.x, 0, y * tileSize.y);
             if (y % 2 != 0)
                 newPos.x += 0.5f * tileSize.x;
@@ -123,13 +156,23 @@ namespace Talespin.AStar.GameMap.MapTiles
 
         #region Private
         /// <summary>
-        /// Quick & dirty init through Physics-Engine
-        /// TODO: Should use Math instead
+        /// Grabs Neighbour-Tiles from Map
         /// </summary>
         private void InitNeighbours()
         {
-            neighbours = Physics.OverlapSphere(transform.position, tileSize.x * .75f, 1 << gameObject.layer)
-                .Select(c => c.GetComponent<IAStarNode>()).ToList();
+            Tile[,] map = MapManager.Instance.Map;
+            neighbours = new List<IAStarNode>();
+            Vector2Int[] offsets = GridCoordinates.y % 2 == 0 ? NEIGHBOUR_OFFSETS_EVEN_ROW : NEIGHBOUR_OFFSETS_ODD_ROW;
+            for (int i = 0; i < offsets.Length; i++)
+            {
+                Vector2Int neighbourPos = GridCoordinates + offsets[i];
+                try
+                {
+                    Tile neighbour = map[neighbourPos.x, neighbourPos.y];
+                    neighbours.Add(neighbour);
+                }
+                catch (IndexOutOfRangeException) { } // Do Nothing (Outside of Grid)
+            }
         }
         #endregion
         #endregion
