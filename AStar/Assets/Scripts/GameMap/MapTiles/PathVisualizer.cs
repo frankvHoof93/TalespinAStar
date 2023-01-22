@@ -9,9 +9,13 @@ namespace Talespin.AStar.GameMap.MapTiles
     public class PathVisualizer : MonoBehaviour
     {
         #region Properties
+        [Header("Components")]
+        [SerializeField]
+        private ParticleSystem particles;
         /// <summary>
         /// Color to set if Tile is Start-Position for Path
         /// </summary>
+        [Header("Colors")]
         [SerializeField]
         [Tooltip("Color to set if Tile is Start-Position for Path")]
         private Color pathStartColor = Color.blue;
@@ -58,14 +62,24 @@ namespace Talespin.AStar.GameMap.MapTiles
         /// <param name="pathLength">Total Length of Path</param>
         public void SetPathTile(int indexInPath, int pathLength)
         {
-            if (currTween != null)
-                LeanTween.cancel(currTween.id);
             Vector3 localPos = transform.localPosition;
             localPos.y = .1f;
             transform.localPosition = localPos;
-            SetColor(indexInPath == 0 ? pathStartColor : indexInPath == pathLength - 1 ? pathEndColor : pathPieceColor);
+            Color c = indexInPath == 0 ? pathStartColor : indexInPath == pathLength - 1 ? pathEndColor : pathPieceColor;
+            SetColor(c);
             if (pathLength != -1)
-                currTween = transform.LeanMoveLocalY(.25f, tweenDuration).setLoopPingPong(-1);
+            {
+                if (currTween != null)
+                {
+                    LeanTween.cancel(currTween.id);
+                    currTween = null;
+                }
+                float delay = ((float)indexInPath / pathLength) * (tweenDuration * 2f);
+                currTween = transform.LeanMoveLocalY(.25f, tweenDuration).setDelay(delay).setLoopPingPong(-1);
+                var particleSettings = particles.main;
+                particleSettings.startColor = c;
+                particles.Play();
+            }
         }
         /// <summary>
         /// Clear Visualization for Tile
@@ -73,11 +87,15 @@ namespace Talespin.AStar.GameMap.MapTiles
         public void ClearPathTile()
         {
             if (currTween != null)
+            {
                 LeanTween.cancel(currTween.id);
+                currTween = null;
+            }
             Vector3 localPos = transform.localPosition;
             localPos.y = 0f;
             transform.localPosition = localPos;
             SetColor(Color.white);
+            particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
         /// <summary>
