@@ -6,18 +6,33 @@ using UnityEngine;
 
 namespace Talespin.AStar.GameMap
 {
+    /// <summary>
+    /// Handles Path-Generation on Map
+    /// </summary>
     public class PathManager : MonoBehaviour
     {
+        /// <summary>
+        /// Current Path
+        /// </summary>
         private IList<IAStarNode> currPath;
 
+        /// <summary>
+        /// Hooks to InputEvents
+        /// </summary>
         private void Start()
         {
             MouseInputManager mgr = MouseInputManager.Instance;
             mgr.OnStartTileChanged += (prev, next) => HandleTileChanged(true, prev, next);
             mgr.OnEndTileChanged += (prev, next) => HandleTileChanged(false, prev, next);
-            MouseInputManager.Instance.OnSelectionChanged += HandleSelectionChanged;
+            mgr.OnSelectionChanged += HandleSelectionChanged;
         }
 
+        /// <summary>
+        /// Sets Visualization for Start- or End-Tile when Selected
+        /// </summary>
+        /// <param name="isPathStart">Whether this is the Start-Tile (or the End-Tile)</param>
+        /// <param name="prev">Previously Selected Tile</param>
+        /// <param name="next">Newly Selected Tile</param>
         private void HandleTileChanged(bool isPathStart, Tile prev, Tile next)
         {
             if (prev != null)
@@ -26,6 +41,10 @@ namespace Talespin.AStar.GameMap
                 next.VisualizePathPiece(isPathStart, !isPathStart);
         }
 
+        /// <summary>
+        /// Checks if both Start- and End-Tile have been selected.
+        /// If both have been slected, generates a new Path
+        /// </summary>
         private void HandleSelectionChanged()
         {
             MouseInputManager input = MouseInputManager.Instance;
@@ -45,6 +64,9 @@ namespace Talespin.AStar.GameMap
             }
         }
 
+        /// <summary>
+        /// Clears (visualization for) Current Path
+        /// </summary>
         private void ClearPath()
         {
             for (int i = 0; i < currPath.Count; i++)

@@ -36,6 +36,7 @@ namespace Talespin.AStar.GameMap
         #endregion
 
         #region Methods
+        #region Public
         /// <summary>
         /// Spawns a new Map using <see cref="MapSize"/> for Size
         /// </summary>
@@ -82,6 +83,9 @@ namespace Talespin.AStar.GameMap
                     Destroy(Map[x, y].gameObject);
             Map = null;
         }
+        #endregion
+
+        #region Unity
         /// <summary>
         /// Self-Initialization
         /// </summary>
@@ -109,6 +113,7 @@ namespace Talespin.AStar.GameMap
             if (MapSize.x <= 0 || MapSize.y <= 0)
                 Debug.LogError("Invalid MapSize", this);
         }
+        #endregion
         #endregion
     }
 }

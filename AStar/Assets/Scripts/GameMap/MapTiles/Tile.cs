@@ -45,12 +45,13 @@ namespace Talespin.AStar.GameMap.MapTiles
         public uint TravelCost { get; private set; }
 
         /// <summary>
-        /// Renderer for Tile (used for Visualization)
+        /// Visualizer for Tile-Pathing
         /// </summary>
         private PathVisualizer visualizer;
         #endregion
 
         #region Methods
+        #region Public
         /// <summary>
         /// The cost of traveling from the Tile BEFORE entering this one, to a Neighour (i.e. the Tile AFTER this one)
         /// is equal to the TravelCost through THIS tile.
@@ -108,7 +109,9 @@ namespace Talespin.AStar.GameMap.MapTiles
         /// Clear Visualization for Tile
         /// </summary>
         public void ClearPathVisualization() => visualizer.ClearPathTile();
+        #endregion
 
+        #region Unity
         /// <summary>
         /// Self-Initialization for Tile
         /// </summary>
@@ -116,7 +119,9 @@ namespace Talespin.AStar.GameMap.MapTiles
         {
             visualizer = GetComponent<PathVisualizer>();
         }
+        #endregion
 
+        #region Private
         /// <summary>
         /// Quick & dirty init through Physics-Engine
         /// TODO: Should use Math instead
@@ -126,6 +131,7 @@ namespace Talespin.AStar.GameMap.MapTiles
             neighbours = Physics.OverlapSphere(transform.position, tileSize.x * .75f, 1 << gameObject.layer)
                 .Select(c => c.GetComponent<IAStarNode>()).ToList();
         }
+        #endregion
         #endregion
     }
 }
