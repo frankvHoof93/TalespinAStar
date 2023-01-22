@@ -85,14 +85,19 @@ namespace Talespin.AStar.GameMap.MapTiles
         #region Methods
         #region Public
         /// <summary>
-        /// The cost of traveling from the Tile BEFORE entering this one, to a Neighour (i.e. the Tile AFTER this one)
-        /// is equal to the TravelCost through THIS tile.
+        /// The cost of traveling from the center of this Tile to the Center of the next tile is equal to half the cost of traveling through both.
+        /// <para>
+        /// Cost = TravelCost(this) * .5f + TravelCost(neighbour) * .5f
+        /// </para>
         /// </summary>
         /// <param name="neighbour">Neighbour to Travel to</param>
         /// <returns></returns>
         public float CostTo(IAStarNode neighbour)
         {
-            return TravelCost;
+            Tile neighbourTile = neighbour as Tile;
+            if (neighbourTile == null)
+                throw new InvalidOperationException("Cannot Calculate the Cost of traveling to a non-tile, as TravelCost is required and not a part of the IAStarNode-interface");
+            return (TravelCost * .5f) + (neighbourTile.TravelCost * .5f);
         }
 
         /// <summary>
