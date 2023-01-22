@@ -7,6 +7,13 @@ namespace Talespin.AStar.GameMap.MapTiles
     {
         private Renderer _renderer;
 
+        [SerializeField]
+        private Color pathStartColor = Color.blue;
+        [SerializeField]
+        private Color pathPieceColor = Color.red;
+        [SerializeField]
+        private Color pathEndColor = Color.green;
+
         private void Awake()
         {
             _renderer = GetComponent<Renderer>();
@@ -23,7 +30,7 @@ namespace Talespin.AStar.GameMap.MapTiles
             Vector3 localPos = transform.localPosition;
             localPos.y = .25f;
             transform.localPosition = localPos;
-            _renderer.material.SetColor("_Color", Color.red);
+            _renderer.material.SetColor("_Color", isStartTile ? pathStartColor : isEndTile ? pathEndColor : pathPieceColor);
         }
         /// <summary>
         /// Clear Visualization for Tile
